@@ -62,7 +62,7 @@
             });
             
             const popup = document.getElementById("popup");
-            popup.innerHTML = <h3>${randomGreeting}</h3><p>${name}, bạn nhận được <strong>${luckyMoney.toLocaleString()} đồng</strong>!</p>;
+            popup.innerHTML = `<h3>${randomGreeting}</h3><p>${name}, bạn nhận được <strong>${luckyMoney.toLocaleString()} đồng</strong>!</p>`;
             popup.style.display = "block";
             
             const fireworksContainer = document.getElementById("fireworks-container");
@@ -152,7 +152,7 @@
     </style>
 </head>
 <body>
-    <div class="container"> 
+    <div class="container">
         <h2>Lộc Năm Mới 2025</h2>
         <input type="text" id="name" placeholder="Nhập tên của bạn" required>
         <button onclick="receiveLuckyMoney()">Nhận Lì Xì</button>
