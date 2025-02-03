@@ -1,213 +1,343 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lộc Năm Mới 2025</title>
-    <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.10.2/dist/index.umd.js"></script>
-    <script type="module">
-        // Import Firebase
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lộc Năm Mới 2025</title>
+  <!-- Google Fonts: Nunito for a round, friendly look -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <!-- Fireworks JS -->
+  <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.10.2/dist/index.umd.js"></script>
+  <script type="module">
+    // Import các module Firebase cần thiết
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      getDocs,
+      query,
+      where,
+      orderBy,
+      limit
+    } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
-        // Firebase configuration (Thay thế bằng config của bạn)
-        const firebaseConfig = {
-            apiKey: "AIzaSyCJTO4pEuUJeqPgDPhYSH0w-SAq7HwlHQw",
-            authDomain: "lixi2025-b26ce.firebaseapp.com",
-            projectId: "lixi2025-b26ce",
-            storageBucket: "lixi2025-b26ce.firebasestorage.app",
-            messagingSenderId: "307654549528",
-            appId: "1:307654549528:web:bdaa334c9df437f63ba36d",
-            measurementId: "G-FYJELRRLHP"
-        };
-        
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+    // Firebase configuration (thay đổi theo cấu hình của bạn)
+    const firebaseConfig = {
+      apiKey: "AIzaSyCJTO4pEuUJeqPgDPhYSH0w-SAq7HwlHQw",
+      authDomain: "lixi2025-b26ce.firebaseapp.com",
+      projectId: "lixi2025-b26ce",
+      storageBucket: "lixi2025-b26ce.firebasestorage.app",
+      messagingSenderId: "307654549528",
+      appId: "1:307654549528:web:bdaa334c9df437f63ba36d",
+      measurementId: "G-FYJELRRLHP",
+    };
 
-        window.receiveLuckyMoney = async function () {
-            const name = document.getElementById("name").value.trim();
-            if (!name) {
-                alert("Nhập tên của bạn!");
-                return;
-            }
-            
-            // Kiểm tra xem tên đã nhận lì xì chưa
-            const usersRef = collection(db, "users");
-            const q = query(usersRef, where("name", "==", name));
-            const querySnapshot = await getDocs(q);
-            
-            if (!querySnapshot.empty) {
-                alert("U là trời! Bạn đã nhận lì xì rồi mà! Chúc bạn năm mới vui vẻ!");
-                return;
-            }
-            
-            const amounts = [
-                50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000,
-                450000, 500000, 550000, 600000, 650000, 700000, 750000, 800000,
-                850000, 900000, 950000, 1000000
-            ]; // Mệnh giá từ 50 ngàn đến 1 triệu đồng
+    // Khởi tạo Firebase và Firestore
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-            const greetings = [
-                "Chúc bạn năm mới an khang thịnh vượng!",
-                "Chúc mừng năm mới! Chúc bạn sức khỏe và may mắn!",
-                "Năm mới phát tài, vạn sự như ý!",
-                "Chúc bạn tình đầy túi, tình đầy tim",
-                "Chúc bạn có một năm đầy may mắn và bình an!"
-            ];
-            const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+    // Hàm chính chạy khi người dùng nhận lì xì
+    window.receiveLuckyMoney = async function () {
+      const name = document.getElementById("name").value.trim();
+      if (!name) {
+        alert("Nhập tên của bạn!");
+        return;
+      }
 
-            // Hàm tạo ra một số ngẫu nhiên với tỷ lệ xuất hiện cho các mệnh giá từ 50k đến 200k
-            function getFinalAmount() {
-                const rand = Math.random();
-                if (rand < 0.8) {
-                    return Math.floor(Math.random() * (100000 - 50000) / 5000) * 5000 + 50000; // 50k - 99k
-                } else if (rand < 0.95) {
-                    return Math.floor(Math.random() * (150000 - 100000) / 5000) * 5000 + 100000; // 100k - 149k
-                } else {
-                    return Math.floor(Math.random() * (200000 - 150000) / 5000) * 5000 + 150000; // 150k - 200k
-                }
-            }
+      // Phát hiệu ứng click khi nhấn nút
+      document.getElementById("audioClick").play();
 
-            // Hiển thị số tiền thay đổi liên tục trong popup từ 50k đến 1 triệu đồng
-            const popup = document.getElementById("popup");
-            let interval = setInterval(function() {
-                const luckyMoney = amounts[Math.floor(Math.random() * amounts.length)];
-                popup.innerHTML = `<h3>${randomGreeting}</h3><p>${name}, bạn nhận được <strong>${luckyMoney.toLocaleString()} đồng</strong>!</p>`;
-                popup.style.display = "block";
-            }, 100); // Hiển thị số tiền thay đổi mỗi 100ms
+      // Kiểm tra xem tên đã nhận lì xì chưa
+      const usersRef = collection(db, "users");
+      const q = query(usersRef, where("name", "==", name));
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        alert("U là trời! Bạn đã nhận lì xì rồi mà! Chúc bạn năm mới vui vẻ!");
+        return;
+      }
 
-            // Lưu thông tin vào Firestore sau khi chọn xong số tiền
-            setTimeout(async () => {
-                clearInterval(interval); // Dừng việc thay đổi số tiền
-                let finalAmount = getFinalAmount(); // Lấy số tiền cuối cùng theo tỷ lệ
+      const amounts = [
+        50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000,
+        450000, 500000, 550000, 600000, 650000, 700000, 750000, 800000,
+        850000, 900000, 950000, 1000000
+      ]; // Mệnh giá từ 50k đến 1 triệu
 
-                await addDoc(collection(db, "users"), {
-                    name: name,
-                    luckyMoney: finalAmount,
-                    timestamp: new Date()
-                });
+      const greetings = [
+        "Chúc bạn năm mới an khang thịnh vượng!",
+        "Chúc mừng năm mới! Chúc bạn sức khỏe và may mắn!",
+        "Năm mới phát tài, vạn sự như ý!",
+        "Chúc bạn tình đầy túi, tình đầy tim",
+        "Chúc bạn có một năm đầy may mắn và bình an!"
+      ];
+      const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
 
-                // Tiến hành hiển thị thông báo cuối cùng
-                popup.innerHTML = `<h3>${randomGreeting}</h3><p>${name}, bạn nhận được <strong>${finalAmount.toLocaleString()} đồng</strong>!</p>`;
-                
-                const fireworksContainer = document.getElementById("fireworks-container");
-                fireworksContainer.style.display = "block";
-                
-                const fireworks = new Fireworks.default(fireworksContainer, { 
-                    autoresize: true, 
-                    opacity: 0.9, 
-                    acceleration: 1.05,
-                    friction: 0.97,
-                    gravity: 1.5,
-                    particles: 150,
-                    trace: 3,
-                    explosion: 5,
-                    intensity: 30,
-                    flickering: 50,
-                    lineStyle: 'round',
-                    hue: { min: 0, max: 360 },
-                    delay: { min: 30, max: 60 }
-                });
-                fireworks.start();
-                
-                setTimeout(() => {
-                    fireworks.stop();
-                    fireworksContainer.style.display = "none";
-                    popup.style.display = "none";
-                }, 5000); // Hiển thị 5 giây
-            }, 3000); // Dừng sau 3 giây
+      // Hàm lấy mệnh giá cuối theo tỷ lệ cho mức từ 50k đến 200k
+      function getFinalAmount() {
+        const rand = Math.random();
+        if (rand < 0.8) {
+          return Math.floor(Math.random() * ((100000 - 50000) / 5000)) * 5000 + 50000; // 50k - 99k
+        } else if (rand < 0.95) {
+          return Math.floor(Math.random() * ((150000 - 100000) / 5000)) * 5000 + 100000; // 100k - 149k
+        } else {
+          return Math.floor(Math.random() * ((200000 - 150000) / 5000)) * 5000 + 150000; // 150k - 200k
         }
+      }
 
-        // Kiểm tra nếu thiết bị là di động và thay đổi background
-        function isMobileDevice() {
-            return /Mobi|Android/i.test(navigator.userAgent);
-        }
+      // Lấy các phần tử của popup "Kết quả" và "Mệnh giá"
+      const resultPopup = document.getElementById("resultPopup");
+      const greetingEl = document.getElementById("greeting");
+      const nameEl = document.getElementById("nameDisplay");
+      const closeResult = document.getElementById("closeResult");
 
-        window.onload = function() {
-            if (isMobileDevice()) {
-                document.body.style.backgroundImage = "url('https://thammylinhanh.vn/wp-content/uploads/2024/12/hinh-anh-dep-nam-2025.jpg')";
-                document.body.style.backgroundSize = "cover"; // Đảm bảo hình ảnh nền phủ hết màn hình
-                document.body.style.backgroundPosition = "center"; // Căn giữa hình nền
-            }
-        };
-    </script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background: url('https://cdn-media.sforum.vn/storage/app/media/ctv_seo10/background-tet-84.jpg') no-repeat center center fixed;
-            background-size: cover;
-            padding: 20px;
-        }
-        .container {
-            max-width: 400px;
-            margin: auto;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h2 {
-            font-family: 'Brush Script MT', cursive;
-            font-size: 28px;
-            color: red;
-            font-weight: bold;
-        }
-        input {
-            width: 100%;
-            padding: 12px 20px;
-            margin: 10px 0;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-        input, button {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            font-size: 16px;
-        }
-        button {
-            background: red;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        .popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            z-index: 1000;
-        }
-        #fireworks-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: none;
-            z-index: 999;
-        }
-    </style>
+      const moneyPopup = document.getElementById("moneyPopup");
+      const moneyDisplay = document.getElementById("moneyDisplay");
+      const closeMoney = document.getElementById("closeMoney");
+
+      // Hiển thị popup kết quả (lời chúc và tên)
+      greetingEl.innerText = randomGreeting;
+      nameEl.innerHTML = `<strong>${name}</strong>`;
+      resultPopup.style.display = "block";
+      setTimeout(() => resultPopup.classList.add("show"), 50);
+
+      // Hiển thị popup mệnh giá
+      moneyPopup.style.display = "block";
+      setTimeout(() => moneyPopup.classList.add("show"), 50);
+
+      // Phát âm thanh slot machine cho mệnh giá: bắt đầu phát audioSpin với loop
+      const spinAudio = document.getElementById("audioSpin");
+      spinAudio.currentTime = 0;
+      spinAudio.loop = true;
+      spinAudio.play();
+
+      let interval = setInterval(() => {
+        const luckyMoney = amounts[Math.floor(Math.random() * amounts.length)];
+        moneyDisplay.innerText = luckyMoney.toLocaleString();
+      }, 100);
+
+      // Sau 3 giây, dừng hiệu ứng quay và chọn mệnh giá cuối cùng
+      setTimeout(async () => {
+        clearInterval(interval);
+        spinAudio.pause(); // Dừng âm thanh slot machine
+        const finalAmount = getFinalAmount();
+
+        // Lưu thông tin vào Firestore
+        await addDoc(usersRef, {
+          name: name,
+          luckyMoney: finalAmount,
+          timestamp: new Date()
+        });
+
+        // Phát âm thanh final
+        document.getElementById("audioFinal").play();
+
+        // Hiệu ứng flip cho mệnh giá cuối cùng
+        moneyDisplay.innerText = finalAmount.toLocaleString();
+        moneyDisplay.classList.add("flip");
+        setTimeout(() => moneyDisplay.classList.remove("flip"), 700);
+
+        // Hiển thị nút "Đóng" cho cả hai popup để người dùng chủ động tắt
+        closeResult.style.display = "block";
+        closeMoney.style.display = "block";
+
+        // Khởi chạy Fireworks (popup vẫn mở cho đến khi người dùng nhấn "Đóng")
+        const fireworksContainer = document.getElementById("fireworks-container");
+        fireworksContainer.style.display = "block";
+        const fireworks = new Fireworks.default(fireworksContainer, {
+          autoresize: true,
+          opacity: 0.9,
+          acceleration: 1.05,
+          friction: 0.97,
+          gravity: 1.5,
+          particles: 150,
+          trace: 3,
+          explosion: 5,
+          intensity: 30,
+          flickering: 50,
+          lineStyle: "round",
+          hue: { min: 0, max: 360 },
+          delay: { min: 30, max: 60 }
+        });
+        fireworks.start();
+
+        setTimeout(() => {
+          fireworks.stop();
+          fireworksContainer.style.display = "none";
+        }, 5000);
+      }, 3000);
+    };
+
+    // Cho phép đóng popup "Kết quả" khi người dùng nhấn nút Đóng
+    window.closeResultPopup = function () {
+      const resultPopup = document.getElementById("resultPopup");
+      resultPopup.classList.remove("show");
+      setTimeout(() => {
+        resultPopup.style.display = "none";
+        document.getElementById("closeResult").style.display = "none";
+      }, 500);
+    };
+
+    // Cho phép đóng popup "Mệnh giá" khi người dùng nhấn nút Đóng
+    window.closeMoneyPopup = function () {
+      const moneyPopup = document.getElementById("moneyPopup");
+      moneyPopup.classList.remove("show");
+      setTimeout(() => {
+        moneyPopup.style.display = "none";
+        document.getElementById("closeMoney").style.display = "none";
+      }, 500);
+    };
+
+    // Kiểm tra thiết bị di động để thay đổi background nếu cần
+    function isMobileDevice() {
+      return /Mobi|Android/i.test(navigator.userAgent);
+    }
+
+    window.onload = function () {
+      if (isMobileDevice()) {
+        document.body.style.backgroundImage = "url('https://thammylinhanh.vn/wp-content/uploads/2024/12/hinh-anh-dep-nam-2025.jpg')";
+        document.body.style.backgroundSize = "cover";
+        document.body.style.backgroundPosition = "center";
+      }
+    };
+  </script>
+  <style>
+    /* Global Styles */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(135deg, #f6d365, #fda085);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    /* Container chính */
+    .container {
+      width: 100%;
+      max-width: 400px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      margin-bottom: 20px;
+    }
+    h2 {
+      font-size: 32px;
+      color: #d9534f;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+    input {
+      width: 100%;
+      padding: 14px;
+      margin: 15px 0;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    input:focus {
+      border-color: #d9534f;
+    }
+    button.action-btn {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      background: #d9534f;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-top: 10px;
+    }
+    button.action-btn:hover {
+      background: #c9302c;
+    }
+    /* Popup chung styling */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      padding: 25px 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.5s;
+      min-width: 280px;
+    }
+    .popup.show {
+      opacity: 1;
+    }
+    /* Popup "Kết quả" */
+    #resultPopup h3 {
+      margin-top: 0;
+      color: #d9534f;
+    }
+    #resultPopup p {
+      font-size: 18px;
+      margin: 20px 0;
+    }
+    /* Popup "Mệnh giá" với font chữ lớn */
+    #moneyPopup .amount {
+      font-weight: bold;
+      font-size: 48px;
+      color: #333;
+      margin: 20px 0;
+      transition: transform 0.6s;
+    }
+    #moneyPopup .amount.flip {
+      transform: rotateX(360deg);
+    }
+    /* Fireworks container */
+    #fireworks-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      z-index: 999;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Lộc Năm Mới 2025</h2>
-        <input type="text" id="name" placeholder="Ai là người may mắn :))" required>
-        <button onclick="receiveLuckyMoney()">Nhận Lì Xì</button>
-    </div>
-    
-    <div id="popup" class="popup"></div>
-    <div id="fireworks-container"></div>
+  <div class="container">
+    <h2>Lộc Năm Mới 2025</h2>
+    <input type="text" id="name" placeholder="Ai là người may mắn :))" required />
+    <button class="action-btn" onclick="receiveLuckyMoney()">Nhận Lì Xì</button>
+  </div>
+
+  <!-- Popup kết quả (hiển thị lời chúc và tên) -->
+  <div id="resultPopup" class="popup">
+    <h3 id="greeting"></h3>
+    <p><span id="nameDisplay"></span>, chúc mừng bạn!</p>
+    <button id="closeResult" class="action-btn" onclick="closeResultPopup()" style="display: none;">Đóng</button>
+  </div>
+
+  <!-- Popup mệnh giá (hiển thị số tiền với hiệu ứng slot machine và flip) -->
+  <div id="moneyPopup" class="popup">
+    <div id="moneyDisplay" class="amount"></div>
+    <button id="closeMoney" class="action-btn" onclick="closeMoneyPopup()" style="display: none;">Đóng</button>
+  </div>
+
+  <!-- Fireworks container -->
+  <div id="fireworks-container"></div>
+
+  <!-- Audio Elements với các file âm thanh mẫu -->
+  <audio id="audioClick" src="https://www.soundjay.com/button/sounds/button-3.mp3"></audio>
+  <audio id="audioSpin" src="https://www.soundjay.com/misc/sounds/spinning-wheel-1.mp3"></audio>
+  <audio id="audioFinal" src="https://www.soundjay.com/human/sounds/applause-8.mp3"></audio>
 </body>
 </html>
