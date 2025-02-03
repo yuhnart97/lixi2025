@@ -24,7 +24,7 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        
+
         window.receiveLuckyMoney = async function () {
             const name = document.getElementById("name").value.trim();
             if (!name) {
@@ -42,9 +42,12 @@
                 return;
             }
             
-            const amounts = [100000, 200000, 300000, 400000, 500000, 600000, 700000, 800000, 900000, 1000000];
-            let luckyMoney = amounts[Math.floor(Math.random() * amounts.length)];
-            
+            const amounts = [
+                50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000,
+                450000, 500000, 550000, 600000, 650000, 700000, 750000, 800000,
+                850000, 900000, 950000, 1000000
+            ]; // Mệnh giá từ 50 ngàn đến 1 triệu đồng
+
             const greetings = [
                 "Chúc bạn năm mới an khang thịnh vượng!",
                 "Chúc mừng năm mới! Chúc bạn sức khỏe và may mắn!",
@@ -54,10 +57,22 @@
             ];
             const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
 
-            // Hiển thị số tiền thay đổi liên tục trong popup
+            // Hàm tạo ra một số ngẫu nhiên với tỷ lệ xuất hiện cho các mệnh giá từ 50k đến 200k
+            function getFinalAmount() {
+                const rand = Math.random();
+                if (rand < 0.8) {
+                    return Math.floor(Math.random() * (100000 - 50000) / 5000) * 5000 + 50000; // 50k - 99k
+                } else if (rand < 0.95) {
+                    return Math.floor(Math.random() * (150000 - 100000) / 5000) * 5000 + 100000; // 100k - 149k
+                } else {
+                    return Math.floor(Math.random() * (200000 - 150000) / 5000) * 5000 + 150000; // 150k - 200k
+                }
+            }
+
+            // Hiển thị số tiền thay đổi liên tục trong popup từ 50k đến 1 triệu đồng
             const popup = document.getElementById("popup");
             let interval = setInterval(function() {
-                luckyMoney = amounts[Math.floor(Math.random() * amounts.length)];
+                const luckyMoney = amounts[Math.floor(Math.random() * amounts.length)];
                 popup.innerHTML = `<h3>${randomGreeting}</h3><p>${name}, bạn nhận được <strong>${luckyMoney.toLocaleString()} đồng</strong>!</p>`;
                 popup.style.display = "block";
             }, 100); // Hiển thị số tiền thay đổi mỗi 100ms
@@ -65,14 +80,16 @@
             // Lưu thông tin vào Firestore sau khi chọn xong số tiền
             setTimeout(async () => {
                 clearInterval(interval); // Dừng việc thay đổi số tiền
+                let finalAmount = getFinalAmount(); // Lấy số tiền cuối cùng theo tỷ lệ
+
                 await addDoc(collection(db, "users"), {
                     name: name,
-                    luckyMoney: luckyMoney,
+                    luckyMoney: finalAmount,
                     timestamp: new Date()
                 });
 
                 // Tiến hành hiển thị thông báo cuối cùng
-                popup.innerHTML = `<h3>${randomGreeting}</h3><p>${name}, bạn nhận được <strong>${luckyMoney.toLocaleString()} đồng</strong>!</p>`;
+                popup.innerHTML = `<h3>${randomGreeting}</h3><p>${name}, bạn nhận được <strong>${finalAmount.toLocaleString()} đồng</strong>!</p>`;
                 
                 const fireworksContainer = document.getElementById("fireworks-container");
                 fireworksContainer.style.display = "block";
@@ -137,7 +154,7 @@
             color: red;
             font-weight: bold;
         }
-	input {
+        input {
             width: 100%;
             padding: 12px 20px;
             margin: 10px 0;
@@ -145,7 +162,7 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
-		}
+        }
         input, button {
             width: 100%;
             padding: 10px;
