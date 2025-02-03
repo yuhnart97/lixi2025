@@ -12,13 +12,13 @@
 
         // Firebase configuration (Thay thế bằng config của bạn)
         const firebaseConfig = {
-              apiKey: "AIzaSyCJTO4pEuUJeqPgDPhYSH0w-SAq7HwlHQw",
-              authDomain: "lixi2025-b26ce.firebaseapp.com",
-              projectId: "lixi2025-b26ce",
-              storageBucket: "lixi2025-b26ce.firebasestorage.app",
-              messagingSenderId: "307654549528",
-              appId: "1:307654549528:web:bdaa334c9df437f63ba36d",
-              measurementId: "G-FYJELRRLHP"
+            apiKey: "AIzaSyCJTO4pEuUJeqPgDPhYSH0w-SAq7HwlHQw",
+            authDomain: "lixi2025-b26ce.firebaseapp.com",
+            projectId: "lixi2025-b26ce",
+            storageBucket: "lixi2025-b26ce.firebasestorage.app",
+            messagingSenderId: "307654549528",
+            appId: "1:307654549528:web:bdaa334c9df437f63ba36d",
+            measurementId: "G-FYJELRRLHP"
         };
         
         // Initialize Firebase
@@ -28,7 +28,7 @@
         window.receiveLuckyMoney = async function () {
             const name = document.getElementById("name").value.trim();
             if (!name) {
-                alert("Vui lòng nhập tên của bạn!");
+                alert("Nhập tên của bạn!");
                 return;
             }
             
@@ -38,12 +38,12 @@
             const querySnapshot = await getDocs(q);
             
             if (!querySnapshot.empty) {
-                alert("Bạn đã nhận lì xì rồi! Chúc bạn năm mới vui vẻ!");
+                alert("U là trời! Bạn đã nhận lì xì rồi mà! Chúc bạn năm mới vui vẻ!");
                 return;
             }
             
             const amounts = [100000, 200000, 300000, 400000, 500000, 600000, 700000, 800000, 900000, 1000000];
-            const luckyMoney = amounts[Math.floor(Math.random() * amounts.length)];
+            let luckyMoney = amounts[Math.floor(Math.random() * amounts.length)];
             
             const greetings = [
                 "Chúc bạn năm mới an khang thịnh vượng!",
@@ -53,43 +53,53 @@
                 "Chúc bạn có một năm đầy may mắn và bình an!"
             ];
             const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
-            
-            // Lưu thông tin vào Firestore
-            await addDoc(collection(db, "users"), {
-                name: name,
-                luckyMoney: luckyMoney,
-                timestamp: new Date()
-            });
-            
+
+            // Hiển thị số tiền thay đổi liên tục trong popup
             const popup = document.getElementById("popup");
-            popup.innerHTML = `<h3>${randomGreeting}</h3><p>${name}, bạn nhận được <strong>${luckyMoney.toLocaleString()} đồng</strong>!</p>`;
-            popup.style.display = "block";
-            
-            const fireworksContainer = document.getElementById("fireworks-container");
-            fireworksContainer.style.display = "block";
-            
-            const fireworks = new Fireworks.default(fireworksContainer, { 
-                autoresize: true, 
-                opacity: 0.9, 
-                acceleration: 1.05,
-                friction: 0.97,
-                gravity: 1.5,
-                particles: 150,
-                trace: 3,
-                explosion: 5,
-                intensity: 30,
-                flickering: 50,
-                lineStyle: 'round',
-                hue: { min: 0, max: 360 },
-                delay: { min: 30, max: 60 }
-            });
-            fireworks.start();
-            
-            setTimeout(() => {
-                fireworks.stop();
-                fireworksContainer.style.display = "none";
-                popup.style.display = "none";
-            }, 10000);
+            let interval = setInterval(function() {
+                luckyMoney = amounts[Math.floor(Math.random() * amounts.length)];
+                popup.innerHTML = `<h3>${randomGreeting}</h3><p>${name}, bạn nhận được <strong>${luckyMoney.toLocaleString()} đồng</strong>!</p>`;
+                popup.style.display = "block";
+            }, 100); // Hiển thị số tiền thay đổi mỗi 100ms
+
+            // Lưu thông tin vào Firestore sau khi chọn xong số tiền
+            setTimeout(async () => {
+                clearInterval(interval); // Dừng việc thay đổi số tiền
+                await addDoc(collection(db, "users"), {
+                    name: name,
+                    luckyMoney: luckyMoney,
+                    timestamp: new Date()
+                });
+
+                // Tiến hành hiển thị thông báo cuối cùng
+                popup.innerHTML = `<h3>${randomGreeting}</h3><p>${name}, bạn nhận được <strong>${luckyMoney.toLocaleString()} đồng</strong>!</p>`;
+                
+                const fireworksContainer = document.getElementById("fireworks-container");
+                fireworksContainer.style.display = "block";
+                
+                const fireworks = new Fireworks.default(fireworksContainer, { 
+                    autoresize: true, 
+                    opacity: 0.9, 
+                    acceleration: 1.05,
+                    friction: 0.97,
+                    gravity: 1.5,
+                    particles: 150,
+                    trace: 3,
+                    explosion: 5,
+                    intensity: 30,
+                    flickering: 50,
+                    lineStyle: 'round',
+                    hue: { min: 0, max: 360 },
+                    delay: { min: 30, max: 60 }
+                });
+                fireworks.start();
+                
+                setTimeout(() => {
+                    fireworks.stop();
+                    fireworksContainer.style.display = "none";
+                    popup.style.display = "none";
+                }, 5000); // Hiển thị 5 giây
+            }, 3000); // Dừng sau 3 giây
         }
 
         // Kiểm tra nếu thiết bị là di động và thay đổi background
@@ -127,6 +137,15 @@
             color: red;
             font-weight: bold;
         }
+	input {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 10px 0;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+		}
         input, button {
             width: 100%;
             padding: 10px;
@@ -167,7 +186,7 @@
 <body>
     <div class="container">
         <h2>Lộc Năm Mới 2025</h2>
-        <input type="text" id="name" placeholder="Nhập tên của bạn" required>
+        <input type="text" id="name" placeholder="Ai là người may mắn :))" required>
         <button onclick="receiveLuckyMoney()">Nhận Lì Xì</button>
     </div>
     
