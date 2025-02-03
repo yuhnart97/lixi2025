@@ -5,93 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lộc Năm Mới 2025</title>
     <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.10.2/dist/index.umd.js"></script>
-    <script type="module">
-        // Import Firebase
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-
-        // Firebase configuration (Thay thế bằng config của bạn)
-        const firebaseConfig = {
-              apiKey: "AIzaSyCJTO4pEuUJeqPgDPhYSH0w-SAq7HwlHQw",
-  authDomain: "lixi2025-b26ce.firebaseapp.com",
-  projectId: "lixi2025-b26ce",
-  storageBucket: "lixi2025-b26ce.firebasestorage.app",
-  messagingSenderId: "307654549528",
-  appId: "1:307654549528:web:bdaa334c9df437f63ba36d",
-  measurementId: "G-FYJELRRLHP"
-        };
-        
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        
-        window.receiveLuckyMoney = async function () {
-            const name = document.getElementById("name").value.trim();
-            if (!name) {
-                alert("Vui lòng nhập tên của bạn!");
-                return;
-            }
-            
-            // Kiểm tra xem tên đã nhận lì xì chưa
-            const usersRef = collection(db, "users");
-            const q = query(usersRef, where("name", "==", name));
-            const querySnapshot = await getDocs(q);
-            
-            if (!querySnapshot.empty) {
-                alert("Bạn đã nhận lì xì rồi! Chúc bạn năm mới vui vẻ!");
-                return;
-            }
-            
-            const amounts = [100000, 200000, 300000, 400000, 500000, 600000, 700000, 800000, 900000, 1000000];
-            const luckyMoney = amounts[Math.floor(Math.random() * amounts.length)];
-            
-            const greetings = [
-                "Chúc bạn năm mới an khang thịnh vượng!",
-                "Chúc mừng năm mới! Chúc bạn sức khỏe và may mắn!",
-                "Năm mới phát tài, vạn sự như ý!",
-                "Chúc bạn tình đầy túi, tình đầy tim",
-                "Chúc bạn có một năm đầy may mắn và bình an!"
-            ];
-            const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
-            
-            // Lưu thông tin vào Firestore
-            await addDoc(collection(db, "users"), {
-                name: name,
-                luckyMoney: luckyMoney,
-                timestamp: new Date()
-            });
-            
-            const popup = document.getElementById("popup");
-            popup.innerHTML = `<h3>${randomGreeting}</h3><p>${name}, bạn nhận được <strong>${luckyMoney.toLocaleString()} đồng</strong>!</p>`;
-            popup.style.display = "block";
-            
-            const fireworksContainer = document.getElementById("fireworks-container");
-            fireworksContainer.style.display = "block";
-            
-            const fireworks = new Fireworks.default(fireworksContainer, { 
-                autoresize: true, 
-                opacity: 0.9, 
-                acceleration: 1.05,
-                friction: 0.97,
-                gravity: 1.5,
-                particles: 150,
-                trace: 3,
-                explosion: 5,
-                intensity: 30,
-                flickering: 50,
-                lineStyle: 'round',
-                hue: { min: 0, max: 360 },
-                delay: { min: 30, max: 60 }
-            });
-            fireworks.start();
-            
-            setTimeout(() => {
-                fireworks.stop();
-                fireworksContainer.style.display = "none";
-                popup.style.display = "none";
-            }, 3000);
-        }
-    </script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -152,7 +65,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container"> 
         <h2>Lộc Năm Mới 2025</h2>
         <input type="text" id="name" placeholder="Nhập tên của bạn" required>
         <button onclick="receiveLuckyMoney()">Nhận Lì Xì</button>
@@ -160,5 +73,93 @@
     
     <div id="popup" class="popup"></div>
     <div id="fireworks-container"></div>
+
+    <script type="module">
+        // Import Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        // Firebase configuration (Thay thế bằng config của bạn)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCJTO4pEuUJeqPgDPhYSH0w-SAq7HwlHQw",
+            authDomain: "lixi2025-b26ce.firebaseapp.com",
+            projectId: "lixi2025-b26ce",
+            storageBucket: "lixi2025-b26ce.firebasestorage.app",
+            messagingSenderId: "307654549528",
+            appId: "1:307654549528:web:bdaa334c9df437f63ba36d",
+            measurementId: "G-FYJELRRLHP"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.receiveLuckyMoney = async function () {
+            const name = document.getElementById("name").value.trim();
+            if (!name) {
+                alert("Vui lòng nhập tên của bạn!");
+                return;
+            }
+            
+            // Kiểm tra xem tên đã nhận lì xì chưa
+            const usersRef = collection(db, "users");
+            const q = query(usersRef, where("name", "==", name));
+            const querySnapshot = await getDocs(q);
+            
+            if (!querySnapshot.empty) {
+                alert("U Là Trời! Bạn đã nhận lì xì rồi! Chúc bạn năm mới vui vẻ!");
+                return;
+            }
+            
+            const amounts = [100000, 200000, 300000, 400000, 500000, 600000, 700000, 800000, 900000, 1000000];
+            const luckyMoney = amounts[Math.floor(Math.random() * amounts.length)];
+            
+            const greetings = [
+                "Chúc bạn năm mới an khang thịnh vượng!",
+                "Chúc mừng năm mới! Chúc bạn sức khỏe và may mắn!",
+                "Năm mới phát tài, vạn sự như ý!",
+                "Chúc bạn tình đầy túi, tình đầy tim",
+                "Chúc bạn có một năm đầy may mắn và bình an!"
+            ];
+            const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+            
+            // Lưu thông tin vào Firestore
+            await addDoc(collection(db, "users"), {
+                name: name,
+                luckyMoney: luckyMoney,
+                timestamp: new Date()
+            });
+            
+            const popup = document.getElementById("popup");
+            popup.innerHTML = `<h3>${randomGreeting}</h3><p>${name}, bạn nhận được <strong>${luckyMoney.toLocaleString()} đồng</strong>!</p>`;
+            popup.style.display = "block";
+            
+            const fireworksContainer = document.getElementById("fireworks-container");
+            fireworksContainer.style.display = "block";
+            
+            const fireworks = new Fireworks.default(fireworksContainer, { 
+                autoresize: true, 
+                opacity: 0.9, 
+                acceleration: 1.05,
+                friction: 0.97,
+                gravity: 1.5,
+                particles: 150,
+                trace: 3,
+                explosion: 5,
+                intensity: 30,
+                flickering: 50,
+                lineStyle: 'round',
+                hue: { min: 0, max: 360 },
+                delay: { min: 30, max: 60 }
+            });
+            fireworks.start();
+            
+            setTimeout(() => {
+                fireworks.stop();
+                fireworksContainer.style.display = "none";
+                popup.style.display = "none";
+            }, 3000);
+        }
+    </script>
 </body>
 </html>
